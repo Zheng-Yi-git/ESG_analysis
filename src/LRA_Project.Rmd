@@ -1,0 +1,62 @@
+---
+title: "project"
+author: "Li Peisen"
+date: '2023-05-29'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(readxl)
+```
+
+# Data Wrangling and Exploratory Data Analysis
+```{r}
+DPSIR_data_D = read_xlsx("../data/附件1：按DPSIR框架模型整理的数据（填补后）.xlsx", sheet = "D-驱动力")
+DPSIR_data_P = read_xlsx("../data/附件1：按DPSIR框架模型整理的数据（填补后）.xlsx", sheet = "P-压力")
+DPSIR_data_S = read_xlsx("../data/附件1：按DPSIR框架模型整理的数据（填补后）.xlsx", sheet = "S-状态")
+DPSIR_data_I = read_xlsx("../data/附件1：按DPSIR框架模型整理的数据（填补后）.xlsx", sheet = "I-影响")
+DPSIR_data_R = read_xlsx("../data/附件1：按DPSIR框架模型整理的数据（填补后）.xlsx", sheet = "R-响应")
+```
+
+```{r}
+# Reviewing the first six rows of the dataset
+head(DPSIR_data_D)
+head(DPSIR_data_P)
+head(DPSIR_data_S)
+head(DPSIR_data_I)
+head(DPSIR_data_R)
+```
+```{r}
+# Checking for null values in dataset
+sum(is.null(DPSIR_data_D))
+sum(is.null(DPSIR_data_P))
+sum(is.null(DPSIR_data_S))
+sum(is.null(DPSIR_data_I))
+sum(is.null(DPSIR_data_R))
+```
+```{r}
+str(DPSIR_data_D)
+```
+```{r}
+str(DPSIR_data_P)
+```
+```{r}
+str(DPSIR_data_S)
+```
+```{r}
+str(DPSIR_data_I)
+```
+```{r}
+str(DPSIR_data_R)
+```
+
+```{r}
+DPSIR_data_S$`环保意识(0表示无，1表示有）` = as.factor(DPSIR_data_S$`环保意识(0表示无，1表示有）`)
+str(DPSIR_data_S)
+```
+
