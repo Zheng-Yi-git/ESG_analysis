@@ -34,7 +34,7 @@ head(DPSIR_data_R)
 
 
 ```{r}
-DPSIR_data_S$`环保意识(0表示无，1表示有）` = as.factor(DPSIR_data_S$`环保意识(0表示无，1表示有）`)
+#DPSIR_data_S$`环保意识(0表示无，1表示有）` = as.factor(DPSIR_data_S$`环保意识(0表示无，1表示有）`)
 ```
 
 ```{r}
@@ -42,4 +42,97 @@ DPSIR_data = cbind(DPSIR_data_D, DPSIR_data_P[, 5:dim(DPSIR_data_P)[2]], DPSIR_d
 head(DPSIR_data)
 ```
 
+```{r}
+X = DPSIR_data[1:5,c(-1,-2,-3,-4)]
+X 
+```
+
+```{r}
+R = X
+for (i in 1:3) {
+  for (j in 1:5) {
+    R[j,i] = (R[j,i]-min(R[,i]))/(max(R[,i])-min(R[,i]))+0.01
+  }
+}
+for (i in 4:11) {
+  for (j in 1:5) {
+    R[j,i] = (R[j,i]-min(R[,i]))/(max(R[,i])-min(R[,i]))+0.01
+  }
+}
+for (i in 13:19) {
+  for (j in 1:5) {
+    R[j,i] = (R[j,i]-min(R[,i]))/(max(R[,i])-min(R[,i]))+0.01
+  }
+}
+R
+```
+```{r}
+# 熵值法赋权
+p = R
+for(j in 1:5)
+{
+  p[j,]=R[j,]/sum(R[j,])
+}
+e = rep(1:19)
+for (i in 1:19) {
+  e[i]=-1/(log(5))*sum(p[,i]*log(p[,i]))
+}
+w = (1-e)/sum(1-e)
+z = R
+for (j in 1:5) {
+  z[j,] = R[j,]*w
+}
+z
+```
+
+
+```{r}
+R_all = DPSIR_data[,c(-1,-2,-3,-4)]
+for (i in 1:3) {
+  for (j in 1:nrow(R_all)) {
+    R_all[j,i] = (R_all[j,i]-min(R_all))/(max(R_all[,i])-min(R_all[,i]))+0.01
+  }
+}
+for (i in 4:11) {
+  for (j in 1:nrow(R_all)) {
+     R_all[j,i] = (max(R_all)-R_all[j,i])/(max(R_all[,i])-min(R_all[,i]))+0.01
+  }
+}
+for (i in 12:19) {
+  for (j in 1:nrow(R_all)) {
+     R_all[j,i] = (R_all[j,i]-min(R_all))/(max(R_all[,i])-min(R_all[,i]))+0.01
+  }
+}
+```
+
+```{r}
+R_all
+```
+
+```{r}
+# 熵值法赋权
+P = R_all
+for(j in 1:5)
+{
+  P[j,]=R_all[j,]/sum(R_all[j,])
+}
+E = rep(1:19)
+for (i in 1:19) {
+  E[i]=-1/(log(nrow(R_all)))*sum(P[,i]*log(P[,i]))
+}
+W = (1-E)/sum(1-E)
+Z = R_all
+for (j in 1:5) {
+  Z[j,] = R_all[j,]*W
+}
+```
+
+
+```{r}
+W_D = sum(W[1:3])/sum(W)
+W_P = sum(W[4:9])/sum(W)
+W_S = sum(W[10:14])/sum(W)
+W_I = sum(W[15:16])/sum(W)
+W_R = sum(W[17:19])/sum(W)
+```
 
